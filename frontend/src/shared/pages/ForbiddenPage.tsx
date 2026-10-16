@@ -1,0 +1,3 @@
+import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+export function ForbiddenPage() { const { t } = useTranslation(); return <main className="grid min-h-screen place-items-center p-6"><div className="max-w-md text-center"><p className="text-sm font-bold text-indigo-600">403</p><h1 className="mt-2 text-2xl font-bold">{t("errors.forbiddenTitle")}</h1><p className="mt-3 text-slate-500">{t("errors.forbiddenDetail")}</p><Link className="mt-6 inline-block rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white" to="/">{t("nav.dashboard")}</Link></div></main>; }
