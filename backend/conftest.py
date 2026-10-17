@@ -13,6 +13,11 @@ def _clear_cache():
     cache.clear()
 
 
+@pytest.fixture(autouse=True)
+def _media_root(settings, tmp_path):
+    settings.MEDIA_ROOT = tmp_path  # test fayllari loyihani ifloslamasin
+
+
 @pytest.fixture
 def api():
     return APIClient()
@@ -31,3 +36,18 @@ def shop(db):
 @pytest.fixture
 def shop_admin(shop):
     return User.objects.create_user("a_admin", password=PASSWORD, role=User.Role.SHOP_ADMIN, shop=shop)
+
+
+@pytest.fixture
+def agent(shop):
+    return User.objects.create_user("a_agent", password=PASSWORD, role=User.Role.AGENT, shop=shop)
+
+
+@pytest.fixture
+def shop_b(db):
+    return Shop.objects.create(name="Dokon B", slug="dokon-b")
+
+
+@pytest.fixture
+def shop_b_admin(shop_b):
+    return User.objects.create_user("b_admin", password=PASSWORD, role=User.Role.SHOP_ADMIN, shop=shop_b)

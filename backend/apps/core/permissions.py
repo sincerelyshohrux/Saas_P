@@ -1,6 +1,6 @@
 from django.utils import timezone
 from rest_framework.permissions import BasePermission
-
+from rest_framework.permissions import SAFE_METHODS, BasePermission
 from .exceptions import PasswordChangeRequired, ShopBlocked, SubscriptionExpired
 
 
@@ -43,3 +43,15 @@ class IsShopAdmin(_RolePermission):
 
 class IsShopStaff(_RolePermission):
     roles = ("SHOP_ADMIN", "AGENT")
+
+
+class ShopAdminWriteStaffRead(IsActiveAccount):
+    """O'qish: dokon admini va agent. Yozish (POST/PATCH/DELETE): faqat dokon admini."""
+
+    def has_permission(self, request, view):
+        if not super().has_permission(request, view):
+            return False
+        role = request.user.role
+        if request.method in SAFE_METHODS:
+            return role in ("SHOP_ADMIN", "AGENT")
+        return role == "SHOP_ADMIN"
